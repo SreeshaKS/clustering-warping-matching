@@ -1,49 +1,13 @@
 #!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-# set dictionarySize in method getImageSIFT, pathImageDir in method main to the desired values
 
-import hashlib
 import time
 import cv2
-import glob
-from os.path import join
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import AffinityPropagation
 import sklearn.cluster
 from sklearn import metrics
 from itertools import cycle
 import sys
-
-# method to output the current time
-def currentTime():
-    localtime = time.asctime(time.localtime(time.time()))
-    return localtime
-
-# method to plot clustering output
-def plotClusters(X, cluster_centers_indices, labels, n_clusters_):
-    plt.close('all')
-    plt.figure(1)
-    plt.clf()
-    colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
-    for k, col in zip(range(n_clusters_), colors):
-        class_members = labels == k
-        cluster_center = X[cluster_centers_indices[k]]
-        plt.plot(X[class_members, 0], X[class_members, 1], col + '.')
-        plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=14)
-        for x in X[class_members]:
-            plt.plot([cluster_center[0], x[0]], [cluster_center[1], x[1]], col)
-    plt.title('Estimated number of clusters: %d' % n_clusters_)
-    plt.show()
-
-# method to calculate silhouette score
-def calculateSilhouette(X, labels, affinityVal):
-    return metrics.silhouette_score(X, labels, metric=affinityVal)
-
-# method to plot a numpy 2D array
-def plotArray(X):
-    plt.scatter(X[:,0], X[:,1])
-    plt.show()
 
 # method to generate SIFT features of images in a directory with some extension
 def getImageSIFT(image_list):
