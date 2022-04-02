@@ -7,6 +7,8 @@ from sklearn import metrics
 from itertools import cycle
 import sys
 from sklearn import cluster, metrics
+from sklearn.metrics.pairwise import pairwise_distances
+from sklearn import metrics
 
 
 def part1(image_list, n_clusters):
@@ -20,21 +22,29 @@ def part1(image_list, n_clusters):
         kp, descriptors = orb.detectAndCompute(i, None)
         descs_list.append(descriptors[0])
 
-    affinityVal = 'euclidean'
-    linkageVal = 'average'
-    ac = sklearn.cluster.AgglomerativeClustering(n_clusters=n_clusters, affinity=affinityVal, linkage=linkageVal).fit_predict(descs_list)
+    def metric(x, y):
+        x, y = np.float32(x), np.float32(y)
+        matches =  cv2.BFMatcher().knnMatch(x, y, k=2)
+        good = []
+        for m,n in matches:
+            if m.distance < 0.75 * n.distance:
+                good.append(m.distance)
+        return sorted(good)[0]
 
+    desc_distance = pairwise_distances(descs_list, descs_list, metric)
+
+    affinityVal = 'precomputed'
+    linkageVal = 'average'
+    ac = sklearn.cluster.AgglomerativeClustering(
+        n_clusters=n_clusters, affinity=affinityVal, linkage=linkageVal
+        ).fit_predict(desc_distance)
+
+    # print(metrics.silhouette_score(descs_list, ac, metric='euclidean'))
     final_str = ''
     for x in range(n_clusters):
         for points in np.where(ac==x):
             final_str += ' '.join([lables[p] for p in points]) + '\n'
     return final_str
-
-
-
-
-
-
 
 
 if sys.argv[1] == 'part1':
