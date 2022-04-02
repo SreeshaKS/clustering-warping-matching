@@ -1,8 +1,3 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-# set dictionarySize in method getImageSIFT, pathImageDir in method main to the desired values
-
-import hashlib
 import time
 import cv2
 import glob
@@ -52,16 +47,16 @@ def getImageSIFT(image_list):
     for file in image_list:
         i = cv2.imread(file, 0)
         if i is not None:
-            sift = cv2.SIFT_create()
-            _, desc = sift.detectAndCompute(i, None)
-            bow.add(desc)
+            orb = cv2.ORB_create(nfeatures=1000)
+            _, desc = orb.detectAndCompute(i, None)
+            bow.add(np.float32(desc))
     return bow
 
 # method to compute BOW Dictionary
 def getBOWDictionary(BOW):
     dictionary = BOW.cluster()
-    sift2 = cv2.SIFT_create()
-    BOW_dict = cv2.BOWImgDescriptorExtractor(sift2, cv2.BFMatcher(cv2.NORM_L2))
+    orb = cv2.ORB_create(nfeatures=1000)
+    BOW_dict = cv2.BOWImgDescriptorExtractor(orb, cv2.BFMatcher(cv2.NORM_L2))
     BOW_dict.setVocabulary(dictionary)
     return BOW_dict
 
@@ -72,8 +67,9 @@ def getImageBOW(image_list, BOWDiction):
     for file in image_list:
         i = cv2.imread(file, 0)
         if i is not None:
-            sift = cv2.SIFT_create()
-            des = BOWDiction.compute(i, sift.detect(i))
+            orb = cv2.ORB_create(nfeatures=1000)
+            des = np.float32(BOWDiction.compute(i, orb.detect(i)))
+            print(des)
             imgDesc.append(des[0])
             img_array.append(file.split('/')[-1])
     return np.asarray(imgDesc), img_array
@@ -81,7 +77,7 @@ def getImageBOW(image_list, BOWDiction):
 
 # method to perform hierarchical clustering; returns labels and centroids
 def performHClustering(X, noCluster, affinityVal, linkageVal):
-    print(noCluster)
+
     ac = sklearn.cluster.AgglomerativeClustering(n_clusters=noCluster, affinity=affinityVal, linkage=linkageVal).fit_predict(X)
     #extracting centroids of hierarchical clusters
     codebook = []
