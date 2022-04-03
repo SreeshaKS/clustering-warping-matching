@@ -178,7 +178,9 @@ def projective_image_transformation(image_orig, s1, t1, s2, t2, s3, t3, s4, t4):
 def part2():
     n = int(sys.argv[2])
 
-    image_orig = sys.argv[3]
+    image_file = sys.argv[3]
+
+    image_orig = Image.open(image_file)
 
     if n==1:
         if len(sys.argv)<8:
