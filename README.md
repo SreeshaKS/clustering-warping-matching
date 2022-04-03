@@ -18,5 +18,9 @@
   - 1000 features - gives the fastest results with a manageable dip in accuracy to 82.4 % ( 25 seconds TAT )
 
 ### False Positives
+![bigben-londoneye](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fp-bigben-londoneye.jpg)
+
 
 ### False Negatives
+![bigben-bigben](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fn-bigben-bigben.jpg)
+
