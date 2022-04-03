@@ -121,7 +121,7 @@ def apply_transformation(image_orig, matrix):
 def image_translation(image, s1, t1):
     x_value = s1[0] - t1[0]
     y_value = s1[1] - t1[1]
-    trans_matrix = np.array([[1,0,x_value],[0,1,y_value][0,0,1]])
+    trans_matrix = np.array([[1,0,x_value],[0,1,y_value],[0,0,1]])
     transformed_img = apply_transformation(image, trans_matrix)
 
 def euclidian_image_transformation(image_orig, s1, t1, s2, t2):
