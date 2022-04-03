@@ -10,7 +10,7 @@ from sklearn import cluster, metrics
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn import metrics
 import sklearn
-
+from PIL import Image
 
 def metric(x, y):
     x, y = np.float32(x), np.float32(y)
