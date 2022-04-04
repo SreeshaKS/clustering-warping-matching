@@ -52,34 +52,34 @@ def prediction_accuracy(c_labels, lables, n, descs_list, images, kp_list):
 
                 # If image belong to the same cluster and has the same filename
                 if (c_labels[i] == c_labels[j]) & (lables[i] == lables[j]):
-                    fig, ax = plt.subplots()
-                    ax.hist(distances)
-                    ax.set_ylabel('count')
-                    ax.set_xlabel('distances')
-                    plt.savefig('results/tp-{}-{}.png'.format(lables[i], lables[j]))
-                    plt.close(fig)
+                    # fig, ax = plt.subplots()
+                    # ax.hist(distances)
+                    # ax.set_ylabel('count')
+                    # ax.set_xlabel('distances')
+                    # plt.savefig('results/tp-{}-{}.png'.format(lables[i], lables[j]))
+                    # plt.close(fig)
                     tp += 1
                 # If image belongs to different class and has a separate file name
                 elif (c_labels[i] != c_labels[j]) & (lables[i] != lables[j]):
                     tn += 1
-                # FP
-                elif (c_labels[i] == c_labels[j]) & (lables[i] != lables[j]):
-                    fig, ax = plt.subplots()
-                    ax.hist(distances)
-                    ax.set_ylabel('count')
-                    ax.set_xlabel('distances')
-                    # plt.show()
-                    plt.savefig('results/fp-{}-{}.png'.format(lables[i], lables[j]))
-                    plt.close(fig)
-                    # cv2.imwrite('results/fp-{}-{}.jpg'.format(lables[i], lables[j]), img3)
-                # FN
-                elif (c_labels[i] != c_labels[j]) & (lables[i] == lables[j]):
-                    fig, ax = plt.subplots()
-                    ax.hist(distances)
-                    ax.set_ylabel('count')
-                    ax.set_xlabel('distances')
-                    plt.savefig('results/fn-{}-{}.png'.format(lables[i], lables[j]))
-                    plt.close(fig)
+                # # FP
+                # elif (c_labels[i] == c_labels[j]) & (lables[i] != lables[j]):
+                #     fig, ax = plt.subplots()
+                #     ax.hist(distances)
+                #     ax.set_ylabel('count')
+                #     ax.set_xlabel('distances')
+                #     # plt.show()
+                #     plt.savefig('results/fp-{}-{}.png'.format(lables[i], lables[j]))
+                #     plt.close(fig)
+                #     # cv2.imwrite('results/fp-{}-{}.jpg'.format(lables[i], lables[j]), img3)
+                # # FN
+                # elif (c_labels[i] != c_labels[j]) & (lables[i] == lables[j]):
+                #     fig, ax = plt.subplots()
+                #     ax.hist(distances)
+                #     ax.set_ylabel('count')
+                #     ax.set_xlabel('distances')
+                #     plt.savefig('results/fn-{}-{}.png'.format(lables[i], lables[j]))
+                #     plt.close(fig)
                     # cv2.imwrite('results/fn-{}-{}.jpg'.format(lables[i], lables[j]), img3)
     return ((tp+tn)/t) * 100
 
