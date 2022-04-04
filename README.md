@@ -41,13 +41,13 @@
 
 ### FP, FN and TP - Match distance vs Count
 #### True postives have the highest good match count
-![hist-tp-bigben-bigben.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fp-bigben-louvre.jpg)
+![hist-tp-bigben-bigben.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/hist-tp-bigben-bigben.png)
 
 #### FPs and FNs have low good match counts as compared to TPs and TNs
 
-![hist-fn-bigben-bigben.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fp-bigben-louvre.jpg)
+![hist-fn-bigben-bigben.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/hist-fn-bigben-bigben.png)
 
-![hist-fp-bigben-colosseum.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fp-bigben-louvre.jpg)
+![hist-fp-bigben-colosseum.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/hist-fp-bigben-colosseum.png)
 
 
 
