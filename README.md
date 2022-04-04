@@ -39,6 +39,18 @@
 
 - Here, the edges and the localities around the keypoints have different intensities and hence the procedure fails since decriptor picked has different distances and fails the ratio test.
 
+### FP, FN and TP - Match distance vs Count
+#### True postives have the highest good match count
+![hist-tp-bigben-bigben.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fp-bigben-louvre.jpg)
+
+#### FPs and FNs have low good match counts as compared to TPs and TNs
+
+![hist-fn-bigben-bigben.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fp-bigben-louvre.jpg)
+
+![hist-fp-bigben-colosseum.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/fp-bigben-louvre.jpg)
+
+
+
 # Part 2 - Image Transformations
 
 Any image transformations can be represented in form of a transformation matrix (usually 3x3). In this section we are doing four different types of transformations - Translation, Euclidian, Affine and Projection. 
