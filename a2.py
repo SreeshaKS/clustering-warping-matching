@@ -11,6 +11,7 @@ from sklearn.metrics.pairwise import pairwise_distances
 from sklearn import metrics
 import sklearn
 from PIL import Image
+import random
 
 def metric(x, y):
     x, y = np.float32(x), np.float32(y)
@@ -219,6 +220,111 @@ def part2():
         t4=eval(sys.argv[13])
         projective_image_transformation(image_orig,s1,t1,s2,t2,s3,t3,s4,t4)
 
+# modified code from part 2 to handle input points as an array of matches
+def make_hypothesis(samples):
+    # Using logic from http://graphics.cs.cmu.edu/courses/15-463/2008_fall/Papers/proj.pdf
+    projective=[[samples[0][0],samples[0][1],1,0,0,0,-(samples[0][0]*samples[0][2]),-(samples[0][1]*samples[0][2])],
+                [samples[1][0],samples[1][1],1,0,0,0,-(samples[1][0]*samples[1][2]),-(samples[1][1]*samples[1][2])],
+                [samples[2][0],samples[2][1],1,0,0,0,-(samples[2][0]*samples[2][2]),-(samples[2][1]*samples[2][2])],
+                [samples[3][0],samples[3][1],1,0,0,0,-(samples[3][0]*samples[3][2]),-(samples[3][1]*samples[3][2])],
+                [0,0,0,samples[0][0],samples[0][1],1,-(samples[0][0]*samples[0][3]),-(samples[0][1]*samples[0][3])],
+                [0,0,0,samples[1][0],samples[1][1],1,-(samples[1][0]*samples[1][3]),-(samples[1][1]*samples[1][3])],
+                [0,0,0,samples[2][0],samples[2][1],1,-(samples[2][0]*samples[2][3]),-(samples[2][1]*samples[2][3])],
+                [0,0,0,samples[3][0],samples[3][1],1,-(samples[3][0]*samples[3][3]),-(samples[3][1]*samples[3][3])]]
+
+    B = np.array([[samples[0][2],samples[1][2],samples[2][2],samples[3][2],samples[0][3],samples[1][3],samples[2][3],samples[3][3]]]).T
+
+    final_transformation_matrix = np.linalg.solve(projective,B)
+    final_transformation_matrix = np.append(final_transformation_matrix,[[1]],axis=0)
+    transformation_matrix = np.reshape(final_transformation_matrix,(3,3))
+    return transformation_matrix
+
+def part3():
+    img1 = cv2.imread(sys.argv[2], cv2.IMREAD_GRAYSCALE)
+    img2 = cv2.imread(sys.argv[3], cv2.IMREAD_GRAYSCALE)
+    output_filename = sys.argv[4]
+
+    # get ORB descriptors
+    orb = cv2.ORB_create(nfeatures=1000)
+    (keypoints1, descriptors1) = orb.detectAndCompute(img1, None)
+    (keypoints2, descriptors2) = orb.detectAndCompute(img2, None)
+
+    # find matching points
+    matches = []
+    threshold_dist = 20
+    for i in range(len(descriptors1)):
+        min_dist = -1
+        min_index = -1
+        for j in range(len(descriptors2)):
+            dist = cv2.norm(descriptors1[i], descriptors2[j], cv2.NORM_HAMMING)
+            if dist < min_dist or min_index == -1:
+                min_dist = dist
+                min_index = j
+        
+        if min_dist < threshold_dist and min_dist > 0:
+            matches.append([int(keypoints1[i].pt[0]), int(keypoints1[i].pt[1]), int(keypoints2[min_index].pt[0]), int(keypoints2[min_index].pt[1])])
+
+    # RANSAC, find projection to stitch images together
+    hypotheses = []
+    voting = []
+    num_rounds = 1000
+    threshold_hypothesis = 2
+    for r in range(num_rounds):
+        samples = random.sample(matches, 4)
+        h = make_hypothesis(samples)
+
+        # if hypothesis has been seen before, count as vote instead of new hypothesis
+        hypothesis_new = True
+        for i in range(len(hypotheses)):
+            if abs(np.sum(hypotheses[i] - h)) < threshold_hypothesis:
+                voting[i] += 1
+                hypothesis_new = False
+
+        # new hypothesis
+        if hypothesis_new:
+            hypotheses.append(h)
+            voting.append(1)
+
+    # get hypothesis with most votes and make 3x3 matrix
+    max_index = 0
+    for i in range(len(hypotheses)):
+        if voting[i] > voting[max_index]:
+            max_index = i
+    final_proj = hypotheses[max_index]
+
+    # transform 2nd image to match projection in image 1
+    img1 = Image.open(sys.argv[2])
+    img2 = Image.open(sys.argv[3])
+
+    # make new images and pull from both img1 and img2
+    new_width = max(img1.width, img2.width)
+    new_height = max(img1.height, img2.height)
+    final_img = Image.new('RGB', (new_width, new_height))
+    # transform 2nd image coordinates to match projection in image 1
+    for x in range(final_img.width):
+        for y in range(final_img.height):
+            # transform into 2nd image coordinates
+            # grab the pixel at that spot in the 2nd image
+            new_coords = np.dot(final_proj, [x, y, 1])
+            new_x = int(new_coords[0] / new_coords[2])
+            new_y = int(new_coords[1] / new_coords[2])
+            new_p = (0,0,0)
+            if new_x > 0 and new_x < img2.width and new_y > 0 and new_y < img2.height:
+                new_p = img2.getpixel((new_x, new_y))
+            final_img.putpixel((x, y), new_p)
+
+    # combine with pixel in first, original image
+    for x in range(img1.width):
+        for y in range(img1.height):
+            if final_img.getpixel((x,y)) == (0,0,0):
+                final_img.putpixel((x,y), img1.getpixel((x,y)))
+            else:
+                old_p = final_img.getpixel((x,y))
+                im1_p = img1.getpixel((x,y))
+                new_p = (int((old_p[0]+im1_p[0])/2), int((old_p[1]+im1_p[1])/2), int((old_p[2]+im1_p[2])/2))
+                final_img.putpixel((x,y), new_p)
+    final_img.save(output_filename)
+
 if sys.argv[1] == 'part1':
     file_to_write = sys.argv[-1]
     n_clusters = int(sys.argv[2])
@@ -236,5 +342,8 @@ if sys.argv[1] == 'part1':
     f = open(file_to_write, 'w')
     f.write(st + " ")
     
-if sys.argv[1]=='part2':
+elif sys.argv[1]=='part2':
     part2()
+
+elif sys.argv[1]=='part3':
+    part3()

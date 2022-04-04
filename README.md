@@ -117,4 +117,37 @@ The image book2.jpg was given as input with 8 points and it gave the following o
 
 
 
+# Part 3 - Automatic Image Matching and Transformations
 
+
+This is a synthesis of the previous parts. In it, we should find matching features across 2 different images of the same object, transform them into the same coordinate space, and combine them to make a panorama.
+
+## Approach
+
+The general approach of the algorithm was to get ORB matches across two different images, where a match would be when the distance of two points was below a certain threshold.
+
+Then, using those matches, we could use the 4-correspond-points method from part 2 to generate hypotheses. We can determine whether a hypothesis is the same as another from the element-wise summed distance below some threshold.
+
+With these hypotheses, we can run RANSAC to get the final correct transformation matrix, which would transform points from image 1 into image 2.
+
+With this matrix we can take the output to simply be the original image 1, with points from image 2 in our new coordinate space. In instances where images 1 and 2 overlap, we take the average.
+
+## Results
+
+While the idea seems to work very well on paper, the actual results were poor. For some reason, RANSAC returns very different results each run. While initially we used 100 rounds, to combat this we changed the number of rounds to 1,000, although this didn't help at all.
+
+For certain runs of the program, the result is almost as expected.
+
+![result1](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_output1.jpg)
+
+However, usually image 2 ends up extremely distorted, like the following:
+
+![result2](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_output2.jpg)
+
+To make sure that every other part worked, we checked the ORB matches. The matches seem to line up very well, here is an example:
+
+![ORB_matches1](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_matches1.jpg)
+
+![ORB_matches2](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_matches2.jpg)
+
+We also thought it could be the fault of our hypothesis-generating method. We experimented with different 4-point algorithms, although they didn't seem to help.
