@@ -134,22 +134,28 @@ With this matrix we can take the output to simply be the original image 1, with 
 
 ## Results
 
-While the idea seems to work very well on paper, the actual results were poor. For some reason, RANSAC returns very different results each run. While initially we used 100 rounds, to combat this we changed the number of rounds to 1,000, although this didn't help at all.
+While the idea seems to work very well on paper, the actual results were poor. For some reason, RANSAC returns very different results each run. We experimented with ORB matches, different hypotheses-generating algorithms, and RANSAC parameters.
 
 For certain runs of the program, the result is almost as expected.
 
 ![result1](part3_output1.jpg)
 
-As you can see, the middle parts of the Eiffel tower line up quite well, and parts of the skyline blend very well together. However, the highest and lowest parts of the tower don't match up very well, showing that something is still off.
-
 However, usually image 2 ends up extremely distorted, like the following:
 
 ![result2](part3_output2.jpg)
 
-To make sure that every other part worked, we checked the ORB matches. The matches seem to line up very well, here is an example:
+## Problems
+
+Before ensuring that RANSAC was the problem, I first had to be sure that the ORB matches weren't causing issues. I visualized the matches like this:
 
 ![ORB_matches1](part3_matches1.jpg)
 
 ![ORB_matches2](part3_matches2.jpg)
 
-We also thought it could be the fault of our hypothesis-generating method. We experimented with different 4-point algorithms, although they didn't seem to help.
+As you can see, they line up very well. I also calculated the slope and magnitude of each match, and plotted slope vs magnitude to see if anything stood out. As you can see, nothing really did.
+
+![slope_vs_mag](slope_vs_mag.png)
+
+We also thought it could be the fault of our hypothesis-generating method. If the hypotheses we generate aren't consistent, then RANSAC won't be consistent either. We experimented with different 4-point algorithms, although they didn't help the results.
+
+So, RANSAC could be at fault here. The voting system seemed to work, and there weren't any obvious bugs. So, perhaps the hypotheses being generated were too far apart to count as the same one, although they were very close practically. So, I moved up the minimum threshold to be counted as the same hypothesis, but it didn't help. I also tried changing the number of RANSAC rounds from 100 to 1,000. However, the results were just as random as ever.
