@@ -140,6 +140,8 @@ For certain runs of the program, the result is almost as expected.
 
 ![result1](part3_output1.jpg)
 
+As you can see, the middle parts of the Eiffel tower line up quite well, and parts of the skyline blend very well together. However, the highest and lowest parts of the tower don't match up very well, showing that something is still off.
+
 However, usually image 2 ends up extremely distorted, like the following:
 
 ![result2](part3_output2.jpg)
