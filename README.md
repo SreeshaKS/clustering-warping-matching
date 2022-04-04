@@ -39,3 +39,82 @@
 
 - Here, the edges and the localities around the keypoints have different intensities and hence the procedure fails since decriptor picked has different distances and fails the ratio test.
 
+# Part 2 - Image Transformations
+
+Any image transformations can be represented in form of a transformation matrix (usually 3x3). In this section we are doing four different types of transformations - Translation, Euclidian, Affine and Projection. 
+
+Before going into the types of transformations and the results the lincon.jpg was applied with the given transformation matrix and gave the following result.
+
+![lincoln](https://media.github.iu.edu/user/17604/files/7155ec04-9147-4b57-84b3-bd15794b7d98)
+![lincon](https://media.github.iu.edu/user/17604/files/5ca5e759-35f1-43c1-82a3-7efb6d3d9d5e)
+
+## Translation 
+
+In this we just have to move the given image a certain units forward or backward in the x or y direction. As mentioned this can be accomplished by using 1 point in the initial image and 1 point in the final image
+
+The transformation matrix would be as follows 
+
+[[1 0 x2-x1] <br>
+[0 1 y2-y1] <br>
+[0 0 1]]
+
+The image book2.jpg was given as input with 2 points and it gave the following output.
+
+![book2](https://media.github.iu.edu/user/17604/files/e3753c35-f343-4833-9c38-9802787b0368)
+![image_translation](https://media.github.iu.edu/user/17604/files/ed657c6b-ba8b-4a69-9219-59c6a50aa573)
+
+## Euclidian Transformation
+
+This is a combination of translation and rotations. In this we can get a matrix with tx = x2 - x1, ty = y2 - y1 and cos a and sin a which is the rotation. This can be done with two points in the original and two points in the final image.
+
+The transformation matrix would be as follows
+
+[[cos(a) -sin(a) x2-x1] <br>
+[-sin(a) cos(a) y2-y1] <br>
+[0 0 1]]
+
+Where there are 4 missing variables and with two points we get 4 equations. This can be solved to obtain the transformation matrix.
+
+The image book2.jpg was given as input with 4 points and it gave the following output.
+
+![book2](https://media.github.iu.edu/user/17604/files/54eabdf8-53e3-45d4-b6fe-c6850d0de45c)
+![image_euclid](https://media.github.iu.edu/user/17604/files/309d3d6a-da37-4c57-b342-b12236ae48ee)
+
+
+## Affine Transformation
+
+This is more of a combination of translation, rotation, sheer and scaling in the image. This can be solved using 3 points of the initial image and 3 points of the final image (6 points in total).
+
+If o1,o2,o3 are the points in the original image and t1,t2,t3 are the points in the transformed image the transformation matrix would look as follows
+
+[[o1 o2 o3] <br>
+[t1 t2 t3] <br>
+[0 0 1]]
+
+There are 6 unknown variables and 6 equations and this can be solved using that.
+
+The image book2.jpg was given as input with 6 points and it gave the following output.
+
+![book2](https://media.github.iu.edu/user/17604/files/ef349d49-9bab-4446-aa0e-45d620c0f245)
+![image_affine_transform](https://media.github.iu.edu/user/17604/files/27d9a036-854f-4308-8563-0234fe846a76)
+
+Please note that the images are distorted as random points were taken as input for the transformations
+
+## Projective transformation
+
+This transformation is a combination of all the three previous transformations with wrapping. This has 8 unknown variables and can be solved using 4 points which will give 8 equations helping us solve these points.
+
+The equations can be solved using the matrix as follows:
+
+[[a b c] <br>
+[d e f] <br>
+[g h i]]
+
+The image book2.jpg was given as input with 8 points and it gave the following output.
+
+![book2](https://media.github.iu.edu/user/17604/files/c2b11f35-a5f5-4410-a3a2-89db759b0ee3)
+![image_projection](https://media.github.iu.edu/user/17604/files/279e2357-1a4d-4357-a8e6-dfc7df4b2c3b)
+
+
+
+
