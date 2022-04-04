@@ -49,7 +49,11 @@
 
 ![hist-fp-bigben-colosseum.png](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/blob/main/hist-fp-bigben-colosseum.png)
 
-
+#### 25TH - 75TH percentile
+- I observed a 2% increase in accuracy with threshold of 0.9
+- What works better is filtering match distances to be between 25 percentile and 75TH percentile of the all match distribution. This also decreases the running time by a few seconds, only if the threshold is 0.9. For 0.75 the run time increases by some margin.
+  - This helps decrease FN and FPs. Also, one can see that for TP and TNs the majority of good matches lie in this range.
+- This metric is for 0.75 threshold ratio test. I presume the window only decreases for 0.9 thresh. 
 
 # Part 2 - Image Transformations
 
