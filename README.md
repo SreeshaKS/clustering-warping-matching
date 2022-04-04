@@ -138,16 +138,16 @@ While the idea seems to work very well on paper, the actual results were poor. F
 
 For certain runs of the program, the result is almost as expected.
 
-![result1](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_output1.jpg)
+![result1](part3_output1.jpg)
 
 However, usually image 2 ends up extremely distorted, like the following:
 
-![result2](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_output2.jpg)
+![result2](part3_output2.jpg)
 
 To make sure that every other part worked, we checked the ORB matches. The matches seem to line up very well, here is an example:
 
-![ORB_matches1](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_matches1.jpg)
+![ORB_matches1](part3_matches1.jpg)
 
-![ORB_matches2](https://github.iu.edu/cs-b657-sp2022/zseliger-sskuruva-idonbosc-a2/part3_matches2.jpg)
+![ORB_matches2](part3_matches2.jpg)
 
 We also thought it could be the fault of our hypothesis-generating method. We experimented with different 4-point algorithms, although they didn't seem to help.
